@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Terrarium — Become self-sustained in software</title>
+<meta name="description" content="Terrarium generates and runs your company's software layer, ERP included, on your own servers. Join the waiting list.">
+<meta property="og:title" content="Terrarium">
+<meta property="og:description" content="Become self-sustained in software.">
+<meta property="og:url" content="https://terrariumos.com">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23E7FF00' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #000000;
+    --paper: #FFFFFF;
+    --gray: #D2D2D2;
+    --lime: #E7FF00;
+    --mute: #6B6B6B;      /* gray text on paper, AA on white */
+    --mute-dark: #9A9A9A; /* gray text on ink, AA on black */
+    --gutter: clamp(20px, 5vw, 72px);
+    --font: "Archivo", "Liberation Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font);
+    font-size: 18px;
+    line-height: 1.55;
+    font-variation-settings: "wdth" 100;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }
+  .wrap { padding-inline: var(--gutter); max-width: 1320px; margin-inline: auto; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    min-height: 100svh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding-top: env(safe-area-inset-top, 0px);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero > .wrap { width: 100%; }
+  .bar { display: flex; justify-content: space-between; align-items: center; padding-block: 28px; }
+  .mark {
+    font-weight: 700; font-size: 19px; letter-spacing: 0.01em;
+    font-variation-settings: "wdth" 125; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .mark svg { width: 20px; height: 20px; }
+  .bar a.more { color: var(--mute-dark); text-decoration: none; font-size: 15px; }
+  .bar a.more:hover { color: var(--paper); }
+
+  .hero-main { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: center; gap: 4vw; }
+  h1 {
+    margin: 0;
+    font-weight: 750;
+    font-variation-settings: "wdth" 112;
+    font-size: clamp(34px, 6.3vw, 100px);
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+  }
+  h1 span { white-space: nowrap; }
+
+  .cycle { width: 100%; max-width: 520px; justify-self: end; aspect-ratio: 1; }
+  .cycle .ring { fill: none; stroke: var(--lime); stroke-width: 1.5; stroke-dasharray: 1195; stroke-dashoffset: 1195; animation: draw 2.2s cubic-bezier(.6,0,.2,1) .2s forwards; }
+  .cycle .tick { fill: var(--ink); stroke: var(--lime); stroke-width: 1.5; opacity: 0; animation: show .4s ease forwards; }
+  .cycle text { fill: var(--mute-dark); font-family: var(--font); font-size: 15px; opacity: 0; animation: show .5s ease forwards; }
+  .cycle .runner { fill: var(--lime); opacity: 0; animation: show .4s ease 2.4s forwards; }
+  .cycle .runner-path { offset-path: path("M260,70 a190,190 0 1,1 -0.01,0"); animation: orbit 14s linear 2.4s infinite; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes show { to { opacity: 1; } }
+  @keyframes orbit { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+
+  .signup { padding-block: 0 44px; padding-bottom: calc(44px + env(safe-area-inset-bottom, 0px)); }
+  form.join { display: flex; flex-wrap: wrap; gap: 10px; max-width: 620px; }
+  .join input[type=email] {
+    flex: 1 1 260px; min-width: 0;
+    height: 58px; padding: 0 18px;
+    font: inherit; font-size: 17px; color: var(--paper);
+    background: transparent; border: 1.5px solid #5A5A5A; border-radius: 0;
+  }
+  .join input[type=email]::placeholder { color: var(--mute-dark); }
+  .join input[type=email]:focus { border-color: var(--lime); outline: none; }
+  .join button {
+    flex: 0 0 auto; height: 58px; padding: 0 26px;
+    font: inherit; font-size: 17px; font-weight: 700;
+    color: var(--ink); background: var(--lime); border: 0; border-radius: 0; cursor: pointer;
+  }
+  .join button:hover { background: #F2FF66; }
+  .join button[disabled] { cursor: progress; opacity: .7; }
+  .hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .status { min-height: 1.6em; margin: 12px 0 0; font-size: 15px; color: var(--mute-dark); }
+  .status.ok { color: var(--lime); }
+  .status.err { color: #FF8A8A; }
+  .fine { margin: 6px 0 0; font-size: 13px; color: var(--mute-dark); }
+
+  /* ---------- Detail (paper) ---------- */
+  .detail { background: var(--paper); color: var(--ink); }
+  .detail section { padding-block: clamp(72px, 11vw, 150px); border-top: 1.5px solid var(--ink); }
+  .detail section:first-child { border-top: 0; }
+  .detail h2 {
+    margin: 0 0 28px;
+    font-weight: 720; font-variation-settings: "wdth" 118;
+    font-size: clamp(32px, 4.6vw, 64px); line-height: 1.02; letter-spacing: -0.025em;
+    max-width: 18ch;
+  }
+  .detail p { margin: 0 0 1.1em; max-width: 62ch; }
+  .detail .lede { font-size: clamp(20px, 1.8vw, 24px); line-height: 1.45; max-width: 46ch; }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+
+  .figures { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1.5px solid var(--ink); margin-top: 8px; }
+  .figures div { padding: 22px 20px 0 0; }
+  .figures strong { display: block; font-size: clamp(40px, 5vw, 68px); font-weight: 750; font-variation-settings: "wdth" 112; letter-spacing: -0.03em; line-height: 1; }
+  .figures span { display: block; margin-top: 10px; font-size: 15px; line-height: 1.4; color: #333; max-width: 26ch; }
+  .src { font-size: 13px; color: var(--mute); margin-top: 22px !important; }
+
+  ol.stages { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-left: 1.5px solid var(--ink); }
+  ol.stages li { padding: 18px 18px 26px; border-right: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); border-top: 1.5px solid var(--ink); margin-top: -1.5px; }
+  ol.stages b { display: block; font-size: 15px; color: var(--mute); font-weight: 500; margin-bottom: 26px; }
+  ol.stages em { display: block; font-style: normal; font-weight: 700; font-size: 20px; font-variation-settings: "wdth" 110; margin-bottom: 6px; }
+  ol.stages span { display: block; font-size: 15px; line-height: 1.4; color: #333; }
+
+  ul.rules { list-style: none; margin: 0; padding: 0; }
+  ul.rules li { padding: 18px 0; border-top: 1.5px solid var(--gray); }
+  ul.rules li:last-child { border-bottom: 1.5px solid var(--gray); }
+  ul.rules b { display: block; font-size: 19px; margin-bottom: 4px; }
+  ul.rules span { color: #333; font-size: 16px; }
+
+  .bars { margin-top: 8px; }
+  .bars .row { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 16px; align-items: center; padding-block: 12px; border-top: 1.5px solid var(--gray); }
+  .bars .row:last-child { border-bottom: 1.5px solid var(--gray); }
+  .bars .lab { font-size: 15px; line-height: 1.3; }
+  .bars .track { position: relative; height: 34px; }
+  .bars .fill { height: 100%; background: var(--ink); display: flex; align-items: center; justify-content: flex-end; }
+  .bars .fill.small { background: var(--lime); outline: 1.5px solid var(--ink); outline-offset: -1.5px; }
+  .bars .val { position: absolute; top: 50%; transform: translateY(-50%); font-size: 15px; font-weight: 700; white-space: nowrap; }
+
+  .roadmap { background: var(--gray); }
+  .roadmap section { border-top: 0; }
+  .tag { display: inline-block; font-size: 14px; font-weight: 600; padding: 3px 10px; border: 1.5px solid var(--ink); margin-bottom: 18px; }
+
+  .closing { background: var(--ink); color: var(--paper); }
+  .closing section { padding-block: clamp(80px, 12vw, 160px); }
+  .closing h2 { margin: 0 0 32px; font-weight: 750; font-variation-settings: "wdth" 125; font-size: clamp(40px, 6vw, 88px); line-height: .96; letter-spacing: -0.03em; max-width: 13ch; }
+
+  footer { background: var(--ink); color: var(--mute-dark); font-size: 14px; }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-block: 28px calc(28px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid #2A2A2A; }
+  footer p { margin: 0; }
+
+  @media (max-width: 900px) {
+    .hero-main { grid-template-columns: 1fr; gap: 24px; align-content: center; }
+    .cycle { max-width: 300px; justify-self: start; order: -1; }
+    .split { grid-template-columns: 1fr; }
+    ol.stages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 520px) {
+    body { font-size: 17px; }
+    .cycle { max-width: 220px; }
+    .cycle text { font-size: 19px; }
+    ol.stages { grid-template-columns: 1fr; }
+    .figures { grid-template-columns: 1fr; }
+    .bars .row { grid-template-columns: 1fr; gap: 6px; }
+    .join button { flex: 1 1 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .cycle .ring { animation: none; stroke-dashoffset: 0; }
+    .cycle .tick, .cycle text, .cycle .runner { animation: none; opacity: 1; }
+    .cycle .runner-path { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap bar">
+    <a class="mark" href="/" aria-label="Terrarium home">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="#E7FF00" stroke-width="2.5"/></svg>
+      Terrarium
+    </a>
+    <a class="more" href="#how">How it works</a>
+  </div>
+
+  <div class="wrap hero-main">
+    <h1>Become<br> <span>self‑sustained</span><br> in software.</h1>
+
+    <svg class="cycle" viewBox="0 0 520 520" role="img" aria-label="A closed loop: brief, build, test, ship, repair, and back to brief.">
+      <circle class="ring" cx="260" cy="260" r="190"/>
+      <!-- five stations, 72° apart, starting at the top -->
+      <g>
+        <circle class="tick" cx="260" cy="70" r="6" style="animation-delay:.5s"/>
+        <circle class="tick" cx="440.7" cy="201.3" r="6" style="animation-delay:.9s"/>
+        <circle class="tick" cx="371.7" cy="413.7" r="6" style="animation-delay:1.3s"/>
+        <circle class="tick" cx="148.3" cy="413.7" r="6" style="animation-delay:1.7s"/>
+        <circle class="tick" cx="79.3" cy="201.3" r="6" style="animation-delay:2.1s"/>
+      </g>
+      <g>
+        <text x="260" y="46" text-anchor="middle" style="animation-delay:.6s">brief</text>
+        <text x="462" y="206" text-anchor="start" style="animation-delay:1s">build</text>
+        <text x="390" y="448" text-anchor="start" style="animation-delay:1.4s">test</text>
+        <text x="130" y="448" text-anchor="end" style="animation-delay:1.8s">ship</text>
+        <text x="58" y="206" text-anchor="end" style="animation-delay:2.2s">repair</text>
+      </g>
+      <g class="runner-path"><circle class="runner" r="5"/></g>
+    </svg>
+  </div>
+
+  <div class="wrap signup" id="join">
+    <form class="join" novalidate>
+      <label class="hp" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+      <label for="email-top" class="hp">Work email</label>
+      <input id="email-top" type="email" name="email" placeholder="you@company.com" autocomplete="email" required>
+      <button type="submit">Join the waiting list</button>
+    </form>
+    <p class="status" role="status" aria-live="polite"></p>
+  </div>
+</header>
+
+<main class="detail">
+  <section class="wrap" id="how">
+    <div class="split">
+      <div>
+        <h2>Most companies rent the software they run on.</h2>
+        <p class="lede">Hundreds of SaaS seats, an ERP on someone else's terms, and AI tools that send your data out of the building. Every year the bill goes up and you own a little less.</p>
+      </div>
+      <div>
+        <div class="figures">
+          <div><strong>$9.5k</strong><span>median SaaS spend per employee, per year</span></div>
+          <div><strong>65%</strong><span>of licences unused or under-used</span></div>
+        </div>
+        <p class="src">Sources: Zylo SaaS Management Index 2026; Vertice, Q2 2026.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="split">
+      <h2>Terrarium builds your software layer and runs it on your servers.</h2>
+      <div>
+        <p class="lede">Describe what your company needs. Terrarium's engine writes, tests and deploys the modules, ERP included, inside your own perimeter.</p>
+        <p>It runs as an air-gapped, on-prem deployment or inside your own cloud account. The code, the data and the off switch stay with you. Terrarium replaces the rented stack; it doesn't sit next to it.</p>
+        <p>The engine is already in use at five design-partner environments.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <h2>From one paragraph to a running module.</h2>
+    <p>Every request goes through the same ten stages. Nothing ships until each one passes.</p>
+    <ol class="stages">
+      <li><b>1</b><em>Intake</em><span>Your paragraph becomes a structured brief.</span></li>
+      <li><b>2</b><em>Scout</em><span>Six to ten leading products are studied for what good looks like.</span></li>
+      <li><b>3</b><em>Spec</em><span>Requirements, UX spec and acceptance scenarios.</span></li>
+      <li><b>4</b><em>Architect</em><span>Stack, module map, API contract and threat model.</span></li>
+      <li><b>5</b><em>Plan</em><span>Epics broken into tasks you can trace.</span></li>
+      <li><b>6</b><em>Build</em><span>One model writes, a second reviews, a third writes the tests.</span></li>
+      <li><b>7</b><em>Integrate</em><span>Containers, end-to-end and contract tests.</span></li>
+      <li><b>8</b><em>UX audit</em><span>A vision model grades every screen.</span></li>
+      <li><b>9</b><em>Harden</em><span>Security scans, secret checks, dependency audit, accessibility.</span></li>
+      <li><b>10</b><em>Ship</em><span>Deployed, documented, with a run report.</span></li>
+    </ol>
+  </section>
+
+  <section class="wrap">
+    <div class="split">
+      <h2>The model that writes the code never approves it.</h2>
+      <ul class="rules">
+        <li><b>Real tools decide pass or fail.</b><span>Linters, type checkers, unit and end-to-end tests, security scanners. Not a model's opinion of its own work.</span></li>
+        <li><b>Three AI vendors, separate jobs.</b><span>The coder, the reviewer and the test author come from different vendors, so one model's blind spots don't get approved by itself.</span></li>
+        <li><b>A missing check says "skipped".</b><span>It never quietly reports "passed".</span></li>
+        <li><b>Every line traces back to a requirement.</b><span>From must-have, to story, to test, to file.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="split">
+      <div>
+        <h2>Your software changes. It doesn't start over.</h2>
+        <p class="lede">A new feature reruns only the work it touches. That's what makes owning your software cheaper to keep than renting it.</p>
+      </div>
+      <div class="bars" role="img" aria-label="Approximate AI tokens: a full new build about 5 million; one new feature about 400 thousand; a bug fix about 40 thousand.">
+        <div class="row"><span class="lab">Full new build</span><div class="track"><div class="fill" style="width:78%"></div><span class="val" style="left:calc(78% + 10px)">~5M tokens</span></div></div>
+        <div class="row"><span class="lab">One new feature</span><div class="track"><div class="fill small" style="width:6.24%"></div><span class="val" style="left:calc(6.24% + 10px)">~400k tokens</span></div></div>
+        <div class="row"><span class="lab">A bug fix</span><div class="track"><div class="fill small" style="width:.62%;min-width:3px"></div><span class="val" style="left:calc(.62% + 13px)">~40k tokens</span></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="detail roadmap">
+  <section class="wrap">
+    <span class="tag">On the roadmap</span>
+    <div class="split">
+      <h2>Software that maintains itself overnight.</h2>
+      <div>
+        <p class="lede">The next step is a night cycle: Terrarium finds what broke during the day, patches it, tests it and has it waiting for your team's approval in the morning.</p>
+        <p>Machines draft, people merge. You keep the final say, and your software keeps getting better while you sleep.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="closing">
+  <section class="wrap">
+    <h2>Own the software your company runs on.</h2>
+    <form class="join" novalidate>
+      <label class="hp" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+      <label for="email-bottom" class="hp">Work email</label>
+      <input id="email-bottom" type="email" name="email" placeholder="you@company.com" autocomplete="email" required>
+      <button type="submit">Join the waiting list</button>
+    </form>
+    <p class="status" role="status" aria-live="polite"></p>
+    <p class="fine">We use your email only to contact you about Terrarium.</p>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Terrarium by AI-Bridge GmbH, Stuttgart</p>
+    <p>&copy; 2026 AI-Bridge GmbH</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var ENDPOINT = "https://xbqeogrfsbfmbvoipuvt.supabase.co/functions/v1/terrarium-waitlist";
+  var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+  function setStatus(el, text, kind) {
+    el.textContent = text;
+    el.className = "status" + (kind ? " " + kind : "");
+  }
+
+  document.querySelectorAll("form.join").forEach(function (form) {
+    var status = form.nextElementSibling;
+    var button = form.querySelector("button");
+    var input = form.querySelector("input[type=email]");
+
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var email = input.value.trim();
+      if (!EMAIL_RE.test(email)) {
+        setStatus(status, "Enter a valid work email address.", "err");
+        input.focus();
+        return;
+      }
+      button.disabled = true;
+      button.textContent = "Joining…";
+      setStatus(status, "", "");
+
+      var ctrl = "AbortController" in window ? new AbortController() : null;
+      var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 12000);
+
+      fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, website: form.querySelector("[name=website]").value, source: location.hostname }),
+        signal: ctrl ? ctrl.signal : undefined
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return {}; }).then(function (body) { return { ok: res.ok, body: body }; });
+        })
+        .then(function (r) {
+          if (r.ok && r.body.ok) {
+            input.value = "";
+            setStatus(status, r.body.already ? "You're already on the waiting list." : "You're on the waiting list. We'll write to you before launch.", "ok");
+          } else {
+            setStatus(status, r.body.error || "We couldn't save your signup. Try again in a minute.", "err");
+          }
+        })
+        .catch(function (err) {
+          var msg = !navigator.onLine ? "You're offline. Reconnect and try again."
+            : (err && err.name === "AbortError") ? "The request timed out. Try again."
+            : "We couldn't reach the server. Try again in a minute.";
+          setStatus(status, msg, "err");
+        })
+        .then(function () {
+          clearTimeout(timer);
+          button.disabled = false;
+          button.textContent = "Join the waiting list";
+        });
+    });
+  });
+})();
+</script>
+</body>
+</html>
